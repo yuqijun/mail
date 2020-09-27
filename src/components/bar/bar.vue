@@ -1,0 +1,13 @@
+<template>
+  <div>
+    装备列表
+  </div>
+</template>
+
+<script>
+
+</script>
+
+<style>
+
+</style>
