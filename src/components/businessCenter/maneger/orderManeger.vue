@@ -95,7 +95,7 @@
           </span>
 
           <el-row v-show="orderStatus ==0 || orderStatus ==1 ||orderStatus ==2 || orderStatus ==3">
-            <el-button  @click="changeOrderStatus(order.orderNo)"  type="primary" plain>{{chooseOrderStatus}}</el-button>
+            <el-button  @click="changeOrderStatus(order.orderNo,order.orderStatus)"  type="primary" plain>{{chooseOrderStatus}}</el-button>
           </el-row>
         </div>
 
@@ -172,16 +172,22 @@
                    const  {data} = res;
                    if(data.respCode=="000000"){
                        this.orderList = data.info;
+                       console.log("根据状态选择 订单时 后端返回的结果："+JSON.stringify(data));
                    }else{
                        this.$message.error("接口请求失败。。")
                    }
                 });
 
             },
-            changeOrderStatus(orderId){
+            changeOrderStatus(orderId,orderStatus){
 
                 alert("触发了 改变订单状态的按钮。。。");
-                var statusInt = parseInt(this.count);
+                // var statusInt = parseInt(this.count);
+                // var statusCount = statusInt+1;
+
+
+
+                var statusInt = parseInt(orderStatus);
                 var statusCount = statusInt+1;
 
                 this.count = statusCount.toString();
