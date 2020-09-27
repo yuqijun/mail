@@ -42,24 +42,23 @@
         methods : {
             login () {
                 if(this.formLabelAlign.account===''||this.formLabelAlign.password===''){
-                    this.$message.error("账户/密码不能为空......")
+                    this.$message.error("账户/密码不能为空......");
                     return ;
                 }else {
                     console.log("向后端发送登录的信息："+JSON.stringify(this.formLabelAlign));
                     this.axios
                         .post("login/", this.formLabelAlign).then((res => {
                             const{data} = res;
-
-                            console.log("登录返回信息---"+data.respCode);
+                            console.log("登陆后的返回信息："+JSON.stringify(data));
                             if (data.respCode === "000000") {
                                 localStorage.setItem("userType",data.typeId);
                                 localStorage.setItem("perm",data.info.typeId);
                                 localStorage.setItem("userId",data.info.id);
                                 localStorage.setItem("shopId",data.shopId);
-                                console.log("后端返回 user 对象"+data.info);
 
                                 console.log("当前登录用户角色ID----"+localStorage.getItem("perm"));
                                 console.log("当前登录用户ID-----"+localStorage.getItem("userId"));
+                                console.log("当前用户持有店铺id："+localStorage.getItem("shopId"));
                                 this.$message({
                                     message:"登录成功,即将跳转至首页....",
                                     type:"success"

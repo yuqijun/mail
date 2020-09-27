@@ -7,24 +7,69 @@
       <!--        订单div-->
       <el-row  v-for="order in orderList" :key="order.id" style="margin-top: 3%;overflow:hidden;margin-bottom: -1%"  id="productcart">
 
+
+        <div style="border:1px solid lavender;height:30px;display:flex;align-items:center;justify-content:center">
+          <span @click="byIt(order.shopId)">
+            {{order.shopName}}
+          </span>
+
+          <span>{{order.shopId}}</span>
+
+        </div>
         <div :span="20" style="border: #e5e9f2 1px solid;margin-top: 1%;overflow:hidden;margin: 0px 0px;padding: 0px 0px;" id="productDiv">
           <!--        产品的div-->
           <el-col v-for="product in order.productList" :key="product.id" :span="20"    style="height:60px;float: left;margin-left: 9%;margin-top:2%">
+
+
+
+
+          <div style="width: 100%;height: 100%">
+
             <div class="productImg" style="margin: 0px 0px;padding:0px 0px">
               <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image" style="display: inline;height: 80px;width:80px;float:left;margin-left: 2%;margin-top: -2%">
             </div>
-            <div style="width: 200px;height: 20px;display: inline;float: left;margin-left:26%;"  id="num">
-            <span style="display: block;margin-bottom: 50%">
-              数量：{{product.number}}
-            </span>
+
+            <div style="width: 200px;height: 30px;display: inline;float: left;">
+              <span style="display: block;">
+                名称
+              </span>
+              <span>
+                {{product.name}}
+              </span>
             </div>
-            <div style="width: 200px;height: 20px;display: inline;float: left;margin-left:26%;" id="price">
-            <span style="display: block">
-                价格: {{product.price}}
-            </span>
+
+            <div style="width: 200px;height: 30px;display: inline;float: left;"  id="num">
+              <span style="display: block;">
+                数量
+              </span>
+              <span>
+                {{product.number}}
+              </span>
             </div>
+
+
+
+            <div style="width: 200px;height: 30px;display: inline;float: left;" id="price">
+              <span style="display: block">
+                  价格
+              </span>
+              <span>
+                {{product.price}}
+              </span>
+            </div>
+
+            <div style="width: 200px;height: 30px;display: inline;float: left;" >
+              <span style="display: block">
+                  单品总价
+              </span>
+              <span>
+                {{product.totalPrice}}
+              </span>
+            </div>
+
+          </div>
           </el-col>
-          <div style="width: 260px;float: right;text-align: left;margin-top: -1%">
+          <div style="width: 380px;float: right;text-align: left;margin-top: -1%">
             <span class="price">
               应付金额：{{order.amountDue}}
             </span>
@@ -34,9 +79,20 @@
             <span class="price">
               实付金额：{{order.aPayment}}
             </span>
+            <span class="price">
+              订单编号：{{order.orderNo}}
+            </span>
           </div>
         </div>
+
+
+
+
       </el-row>
+
+
+
+
     </el-main>
   </el-container>
 </template>
@@ -67,6 +123,11 @@
                         this.$message.error("后端请求接口失败.....")
                     }
                 }))
+        },
+        methods:{
+            byIt (shopId){
+                 this.$router.push({path:"/business",query:{shopId:shopId}});
+            },
         }
     }
 </script>

@@ -12,7 +12,7 @@
     </el-menu-item>
     <el-menu-item index="3"  style="margin-left: 66%">处理中心</el-menu-item>
     <el-menu-item index="4" >消息中心</el-menu-item>
-    <el-menu-item @click="redirectOrderList()" index="5">订单管理</el-menu-item>
+    <el-menu-item @click="redirectOrderList()" index="5">我的订单</el-menu-item>
 <!--    <el-menu-item @click="reBackHome()" index="1" style="float: left;margin-left: -75.5%">首页</el-menu-item>-->
     <el-menu-item index="6" style="float: right;margin-right: 5%">
       <el-avatar :size="size" :src="circleUrl" ></el-avatar>

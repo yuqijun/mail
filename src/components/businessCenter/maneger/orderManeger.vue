@@ -8,7 +8,7 @@
       </el-select>
       <el-button slot="append" icon="el-icon-search" @click="searchRoute">搜索</el-button>
     </el-input>
-    <div  style="display: inline">
+    <template   style="display: inline">
       <el-radio v-model="orderStatus" @change="getOrderByStatus" label="0">未接订单</el-radio>
       <el-radio v-model="orderStatus" @change="getOrderByStatus" label="1">已接单</el-radio>
       <el-radio v-model="orderStatus" @change="getOrderByStatus" label="2">准备中</el-radio>
@@ -16,27 +16,71 @@
       <el-radio v-model="orderStatus" @change="getOrderByStatus" label="4">商家送达</el-radio>
       <el-radio v-model="orderStatus" @change="getOrderByStatus" label="5">用户确认收到</el-radio>
       <el-radio v-model="orderStatus" @change="getOrderByStatus" label="6">交易完成</el-radio>
-    </div>
+    </template>
     <!--        订单div-->
     <el-row  v-for="order in orderList" :key="order.id" style="margin-top: 2%;overflow:hidden;margin-bottom: -1%"  id="productcart">
+
+
+
       <div :span="20" style="border: #e5e9f2 1px solid;margin-top: 1%;overflow:hidden;margin: 0px 0px;padding: 0px 0px;" id="productDiv">
         <!--        产品的div-->
         <el-col v-for="product in order.productList" :key="product.id" :span="20"    style="height:60px;float: left;margin-left: 9%;margin-top:2%;display: block">
           <div class="productImg" style="margin: 0px 0px;padding:0px 0px">
             <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image" style="display: inline;height: 80px;width:80px;float:left;margin-left: 2%;margin-top: -2%">
           </div>
-          <div style="width: 200px;height: 20px;display: inline;float: left;margin-left:26%;"  id="num">
-            <span style="display: block;margin-bottom: 50%">
-              数量：{{product.number}}
-            </span>
+
+          <div style="width:100%;height: 100%;">
+
+            <div style="width: 200px;height: 20px;display: inline;float: left;margin-left: 3%" >
+              <span style="display: block;">
+                名称
+              </span>
+              <span style="display: block;margin-bottom: 5%">
+                {{product.name}}
+              </span>
+            </div>
+
+            <div style="width: 200px;height: 20px;display: inline;float: left;margin-left: 3%"  id="num">
+              <span style="display: block;">
+                数量
+              </span>
+              <span style="display: block;">
+                {{product.number}}
+              </span>
+            </div>
+
+            <div style="width: 200px;height: 20px;display: inline;float: left;margin-left: 3%" id="price">
+              <span style="display: block;">
+                  价格
+              </span>
+              <span style="display: block;">
+                {{product.price}}
+              </span>
+            </div>
+
+
+            <div style="width: 200px;height: 20px;display: inline;float: left;margin-left: 3%" >
+              <span style="display: block;">
+                  单品总价
+              </span>
+              <span style="display: block;">
+                {{product.totalPrice}}
+              </span>
+            </div>
+
+
           </div>
-          <div style="width: 200px;height: 20px;display: inline;float: left;margin-left:26%;" id="price">
-            <span style="display: block">
-                价格: {{product.price}}
-            </span>
-          </div>
+
+
+
+
+
+
+
+
+
         </el-col>
-        <div style="width: 260px;float: right;text-align: left;margin-top: -1%;display: block;margin-right: 8%;margin-bottom: 1%;">
+        <div style="width: 370px;float: right;text-align: left;margin-top: 1%;display: block;margin-right: 3%;margin-bottom: 1%;">
           <span class="price">
             应付金额：{{order.amountDue}}
           </span>
@@ -49,7 +93,14 @@
           <span class="price">
             订单编号：<a href="#" @click="toDetail(order.orderNo)">{{order.orderNo}}</a>
           </span>
+
+          <el-row v-show="orderStatus ==0 || orderStatus ==1 ||orderStatus ==2 || orderStatus ==3">
+            <el-button  @click="changeOrderStatus(order.orderNo)"  type="primary" plain>{{chooseOrderStatus}}</el-button>
+          </el-row>
         </div>
+
+
+
       </div>
     </el-row>
 
@@ -65,34 +116,37 @@
     export default {
         data(){
             return{
+                count:"0",
+                messageInfo:"",
                 input1:'',
                 select:"",
-                orderStatus:"",
+                select2:"",
+                orderStatus:"0",
                 orderList:[
-                    {
-                        orderNo:"15156151516",
-                        amountDue:"1561",
-                        aPayment:"100",
-                        dPayment:"156",
-                        productList:[
-                            {
-                                name:"汉堡王",
-                                url:"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-                                number:"2",
-                                price:"3",
-                                totalPrice:"23"
-                            },
-                            {
-                                name:"汉堡王2",
-                                url:"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-                                number:"2",
-                                price:"3",
-                                totalPrice:"23"
-                            }
-
-                        ]
-
-                    }
+                    // {
+                    //     orderNo:"15156151516",
+                    //     amountDue:"1561",
+                    //     aPayment:"100",
+                    //     dPayment:"156",
+                    //     productList:[
+                    //         {
+                    //             name:"汉堡王",
+                    //             url:"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
+                    //             number:"2",
+                    //             price:"3",
+                    //             totalPrice:"23"
+                    //         },
+                    //         {
+                    //             name:"汉堡王2",
+                    //             url:"https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
+                    //             number:"2",
+                    //             price:"3",
+                    //             totalPrice:"23"
+                    //         }
+                    //
+                    //     ]
+                    //
+                    // }
                 ]
 
             }
@@ -123,13 +177,46 @@
                    }
                 });
 
-                // console.log("orderStatus  ：："+this.orderStatus);
-            }
-        },
-        mounted () {
+            },
+            changeOrderStatus(orderId){
 
+                alert("触发了 改变订单状态的按钮。。。");
+                var statusInt = parseInt(this.count);
+                var statusCount = statusInt+1;
+
+                this.count = statusCount.toString();
+                alert("改变订单状态后  status自增后转换成的字符串为："+this.count);
+
+
+                alert("像后端发送的 参数：orderNo:"+orderId+",status:"+statusCount);
+
+                const params ={
+                    orderNo:orderId,
+                    status:statusCount
+                };
+
+
+
+                 this.axios
+                     .post("order/changeStatus",params)
+                     .then((res)=>{
+                         const {data} = res;
+                        console.log("更改订单状态的返回结果："+JSON.stringify(data));
+                        if(data.respCode == "000000"){
+                            this.$message({
+                                type:"success",
+                                message:this.messageInfo
+                            });
+                        }else{
+                            this.$message.error("系统异常")
+                        }
+                     });
+            }},
+        mounted () {
+            console.log("商家订单管理页面---shopId"+localStorage.getItem("shopId"));
             const params = {
-                shopId: "000000000001"
+                // shopId: "000000000001"
+                shopId:localStorage.getItem("shopId")
             };
             // var shopId =  this.$route.query.id;
             //根据店铺商铺id 查询出所有的店铺产品
@@ -139,6 +226,26 @@
                     // console.log("根据店铺编号返回的 店铺订单"+JSON.stringify(data.info));
                     this.orderList = data.info;
                 });
+        },
+        computed:{
+          chooseOrderStatus:function(){
+              switch (this.orderStatus) {
+                  case "0":
+                      this.messageInfo = "接单成功";
+                      return "接单";
+                  case "1":
+                      this.messageInfo= "请开始准备订单";
+                    return "准备订单";
+                  case "2":
+                      this.messageInfo = "请尽快将订单送达客户指定地址";
+                      return "配送";
+                  case "3":
+                      this.messageInfo = "订单已送达";
+                      return "已送达";
+                  default:
+                      break;
+              }
+          }
         }
     }
 </script>
