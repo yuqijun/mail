@@ -162,10 +162,6 @@
                   shopId:localStorage.getItem("shopId"),
                   status:this.orderStatus
                 };
-
-
-
-
                 this.axios.post("order/getOrderByStatus",params
                 ).
                 then((res)=>{
@@ -180,34 +176,17 @@
 
             },
             changeOrderStatus(orderId,orderStatus){
-
-                alert("触发了 改变订单状态的按钮。。。");
-                // var statusInt = parseInt(this.count);
-                // var statusCount = statusInt+1;
-
-
-
                 var statusInt = parseInt(orderStatus);
                 var statusCount = statusInt+1;
-
                 this.count = statusCount.toString();
-                alert("改变订单状态后  status自增后转换成的字符串为："+this.count);
-
-
-                alert("像后端发送的 参数：orderNo:"+orderId+",status:"+statusCount);
-
                 const params ={
                     orderNo:orderId,
                     status:statusCount
                 };
-
-
-
                  this.axios
                      .post("order/changeStatus",params)
                      .then((res)=>{
                          const {data} = res;
-                        console.log("更改订单状态的返回结果："+JSON.stringify(data));
                         if(data.respCode == "000000"){
                             this.$message({
                                 type:"success",
@@ -219,7 +198,6 @@
                      });
             }},
         mounted () {
-            console.log("商家订单管理页面---shopId"+localStorage.getItem("shopId"));
             const params = {
                 // shopId: "000000000001"
                 shopId:localStorage.getItem("shopId")

@@ -3,9 +3,19 @@
     <el-header style="margin-top: -80px">
       <appHeader></appHeader>
     </el-header>
-    <el-main >
+    <el-main>
+
+      <div style="margin-top: 4%">
+        <el-radio v-model="orderStatus" @change="getOrderByStatus" label="0">等待商家接单</el-radio>
+        <el-radio v-model="orderStatus" @change="getOrderByStatus" label="1">商家已接单</el-radio>
+        <el-radio v-model="orderStatus" @change="getOrderByStatus" label="2">商家正在备货</el-radio>
+        <el-radio v-model="orderStatus" @change="getOrderByStatus" label="3">开始配送</el-radio>
+        <el-radio v-model="orderStatus" @change="getOrderByStatus" label="4">商家送达</el-radio>
+        <el-radio v-model="orderStatus" @change="getOrderByStatus" label="5">已确认收货</el-radio>
+        <el-radio v-model="orderStatus" @change="getOrderByStatus" label="6">交易完成</el-radio>
+      </div>
       <!--        订单div-->
-      <el-row  v-for="order in orderList" :key="order.id" style="margin-top: 3%;overflow:hidden;margin-bottom: -1%"  id="productcart">
+      <el-row  v-for="order in orderList" :key="order.id" style="margin-top: 2%;overflow:hidden;margin-bottom: -1%"  id="productcart">
 
 
         <div style="border:1px solid lavender;height:30px;display:flex;align-items:center;justify-content:center">
@@ -82,6 +92,12 @@
             <span class="price">
               订单编号：{{order.orderNo}}
             </span>
+            <span v-if="orderStatus=='0'" class="price">
+              <el-button type="danger" plain>退款</el-button>
+            </span>
+            <span v-if="orderStatus=='4'" class="price">
+              <el-button type="success" plain>确认收货</el-button>
+            </span>
           </div>
         </div>
 
@@ -106,28 +122,67 @@
         data() {
             return {
                 currentDate: new Date(),
-                orderList:''
+                orderList:'',
+                orderStatus:"0",
             }
         },
         mounted(){
             var userId = localStorage.getItem("userId");
-            const param = {userId:userId};
-            this.axios
-                .post("/order/list",param)
-                .then((res=>{
-                    const  {data} = res;
-                    if(data.respCode==="000000"){
-                        console.log("从后端获取到的 数据 "+JSON.stringify(data.info));
-                        this.orderList = data.info;
-                    }else{
-                        this.$message.error("后端请求接口失败.....")
-                    }
-                }))
+            const param = {
+                userId:userId,
+                status :this.orderStatus
+            };
+
+            console.log("传递给 getOrderByStatus 的参数 "+JSON.stringify(param));
+
+            this.axios.post("order/getOrderIndexStatus",param
+            ).
+            then((res)=>{
+                const  {data} = res;
+                if(data.respCode=="000000"){
+                    this.orderList = data.info;
+                    console.log("根据状态选择 订单时 后端返回的结果："+JSON.stringify(data));
+                }else{
+                    this.$message.error("接口请求失败。。")
+                }
+            });
+
+
+
+            // this.axios
+            //     .post("/order/list",param)
+            //     .then((res=>{
+            //         const  {data} = res;
+            //         if(data.respCode==="000000"){
+            //             console.log("从后端获取到的 数据 "+JSON.stringify(data.info));
+            //             this.orderList = data.info;
+            //         }else{
+            //             this.$message.error("后端请求接口失败.....")
+            //         }
+            //     }))
         },
         methods:{
             byIt (shopId){
                  this.$router.push({path:"/business",query:{shopId:shopId}});
             },
+            getOrderByStatus() {
+                const params = {
+                    shopId: localStorage.getItem("shopId"),
+                    status: this.orderStatus
+                };
+                this.axios.post("order/getOrderByStatus",params
+                ).
+                then((res)=>{
+                    const  {data} = res;
+                    if(data.respCode=="000000"){
+                        this.orderList = data.info;
+                        console.log("根据状态选择 订单时 后端返回的结果："+JSON.stringify(data));
+                    }else{
+                        this.$message.error("接口请求失败。。")
+                    }
+                });
+            }
+
         }
     }
 </script>
